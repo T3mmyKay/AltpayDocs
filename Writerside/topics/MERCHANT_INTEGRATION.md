@@ -5,15 +5,15 @@
 - [Introduction](#introduction)
 - [Getting Started](#getting-started)
 - [API Reference](#api-reference)
-  - [Authentication](#authentication)
-  - [Initiating Payments](#initiating-payments)
-  - [Verifying Payments](#verifying-payments)
+    - [Authentication](#authentication)
+    - [Initiating Payments](#initiating-payments)
+    - [Verifying Payments](#verifying-payments)
 - [Webhooks](#webhooks)
-  - [Setting Up Webhooks](#setting-up-webhooks)
-  - [Webhook Security](#webhook-security)
-  - [Webhook Events](#webhook-events)
-  - [Best Practices](#best-practices)
-  - [Webhook Retries](#webhook-retries)
+    - [Setting Up Webhooks](#setting-up-webhooks)
+    - [Webhook Security](#webhook-security)
+    - [Webhook Events](#webhook-events)
+    - [Best Practices](#best-practices)
+    - [Webhook Retries](#webhook-retries)
 - [Testing](#testing)
 - [Sample Integration](#sample-integration)
 
@@ -25,12 +25,22 @@ AltPay provides a secure and reliable payment processing solution for businesses
 
 1. Sign up for an AltPay merchant account
 2. Get your API keys from the dashboard:
-   - Test Secret Key: For development and testing
-   - Live Secret Key: For production use
+    - Test Secret Key: For development and testing
+    - Live Secret Key: For production use
 3. Set up your webhook URL
 4. Start accepting payments
 
 ## API Reference
+
+### Base URL
+
+All API requests should be made to:
+
+```
+https://api.altpayng.com/
+```
+
+For test environment, use the same base URL with your test API keys.
 
 ### Authentication
 
@@ -45,7 +55,7 @@ X-ALTPAY-KEY: your_secret_key_here
 To initiate a payment and generate a virtual account:
 
 ```http
-POST /payments/initiate
+POST /api/v1/payments/initiate
 ```
 
 Request body:
@@ -96,7 +106,7 @@ Response:
 To check the status of a payment:
 
 ```http
-GET /payments/status/{reference}
+GET /api/v1/payments/status/{reference}
 ```
 
 > **Note**: You can use either your secret key or public key for payment verification.
@@ -329,7 +339,7 @@ When you receive a webhook, you should:
 
 Here's how to verify webhook signatures in C#:
 
-```c#
+```C#
 public bool IsValidWebhook(
     string payload,
     string signatureHeader,
@@ -354,7 +364,7 @@ public bool IsValidWebhook(
 
 Example usage in an ASP.NET Core webhook endpoint:
 
-```c#
+```C#
 [HttpPost("webhook")]
 public async Task<IActionResult> HandleWebhook(
     [FromServices] IConfiguration config)
@@ -512,17 +522,15 @@ If your endpoint fails to respond with a 2xx status code, AltPay implements an e
 AltPay provides two types of API keys:
 
 1. **Secret Key**
-   - Used for all server-side API calls
-   - Required for payment initiation
-   - Required for payment verification
-   - Never expose in client-side code
-   - Different keys for test/live environments
+    - Used for all server-side API calls
+    - Required for payment initiation
+    - Required for payment verification
+    - Never expose in client-side code
 
 2. **Public Key**
-   - Used for client-side operations
-   - Safe to expose in frontend code
-   - Limited to non-sensitive operations
-   - Different keys for test/live environments
+    - Used for client-side operations
+    - Safe to expose in frontend code
+    - Limited to non-sensitive operations
 
 **Key Usage Matrix:**
 
@@ -634,5 +642,3 @@ public class AltPayService
     }
 }
 ```
-
-For more examples and detailed API documentation, visit our [API Reference](https://docs.altpay.ng/api).
